@@ -1,0 +1,23 @@
+ul {
+    &.attendee-list {
+        overflow-y: scroll;
+        max-height: 38%;
+        border: 1px solid #ccc;
+    }
+}
+li {
+    &.attendee {
+        border-bottom: 1px solid #ccc;
+
+        &:last-child {
+            border-bottom: none;
+        }
+        
+        &:nth-child(even) {
+            background: #f8f8f8;
+        }
+    }
+}
+.btn-register {
+    margin-right: 8px;
+}

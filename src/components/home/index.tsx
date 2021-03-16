@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import List from '@app/list';
 
 export default class Home extends Component {
     render () {
@@ -8,7 +7,6 @@ export default class Home extends Component {
                 <main role="main" className="container">
                     <div>
                         home works
-                        <List {...this.props}></List>
                     </div>
                 </main>
             </>
