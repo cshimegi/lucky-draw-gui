@@ -1,11 +1,39 @@
 import React, { Component } from 'react';
 import RegisterFrom from './register';
+import RepoService from '@service/repo';
 
 
 export default class List extends Component {
     constructor(props) {
         super(props);
+        
+        this.state = {
+            isLoading: false,
+            items: [],
+            error: null
+        };
     }
+
+    componentDidMount() {
+        RepoService
+            .getAll('attendee')
+            .then(
+                (result) => {
+                    console.log('this.attendeeRepo', result)
+                    // this.setState({
+                    //     isLoaded: true,
+                    //     items: result
+                    // });
+                },
+                (error) => {
+                    console.error(error)
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            )
+      }
 
     render () {
         const items = new Array(15);

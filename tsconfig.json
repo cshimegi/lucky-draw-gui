@@ -21,7 +21,8 @@
     "paths": {
       "@app/*": ["src/components/*"],
       "@css/*": ["public/assets/css/*"],
-      "@scss/*": ["public/assets/scss/*"]
+      "@scss/*": ["public/assets/scss/*"],
+      "@service/*": ["src/services/*"]
     }
   },
   "include": [
