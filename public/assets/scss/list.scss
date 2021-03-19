@@ -1,6 +1,6 @@
 ul {
     &.attendee-list {
-        overflow-y: scroll;
+        overflow-y: auto;
         max-height: 38%;
         border: 1px solid #ccc;
     }

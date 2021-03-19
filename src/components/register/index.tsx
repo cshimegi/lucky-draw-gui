@@ -1,44 +1,61 @@
 import React, { Component } from 'react';
-import RegisterFrom from './register';
+import RegisterForm from './register';
 import RepoService from '@service/repo';
+import ListGroup from 'react-bootstrap/ListGroup'
 
+interface IState {
+    isLoaded: boolean,
+    items: any,
+    error: any
+};
 
-export default class List extends Component {
-    constructor(props) {
+export default class List extends Component<{}, IState> {
+    constructor (props)
+    {
         super(props);
         
         this.state = {
-            isLoading: false,
+            isLoaded: false,
             items: [],
             error: null
         };
     }
 
-    componentDidMount() {
+    componentDidMount (): void
+    {
+        this.getAllAttendee();
+    }
+
+    getAllAttendee (): void
+    {
         RepoService
             .getAll('attendee')
             .then(
-                (result) => {
-                    console.log('this.attendeeRepo', result)
-                    // this.setState({
-                    //     isLoaded: true,
-                    //     items: result
-                    // });
+                (results) => {
+                    this.setState({
+                        isLoaded: true,
+                        items: results
+                    });
                 },
                 (error) => {
                     console.error(error)
                     this.setState({
                         isLoaded: true,
-                        error
+                        error: error
                     });
                 }
             )
-      }
+    }
 
     render () {
-        const items = new Array(15);
-        items.fill(10);
-        const attendeeNums = items.length;
+        const items = this.state.items.map((item) => {
+            item.name = unescape(item.name);
+            item.email = unescape(item.email);
+            item.phone = unescape(item.phone);
+            
+            return item;
+        });
+        const attendeeNums = this.state.items.length;
 
         return (
             <>
@@ -49,10 +66,10 @@ export default class List extends Component {
                         </p>
                     </div>
                     <div className="row">
-                        <RegisterFrom></RegisterFrom>
-                        <div className="col-md-4 order-md-2 mb-4">
+                        <RegisterForm callback={this.getAllAttendee} />
+                        <div className="col-md-6 order-md-2 mb-4">
                             <h4 className="d-flex justify-content-between align-items-center mb-3">
-                                <span className="text-muted">Attendee</span>
+                                <span className="text-muted">Current Attendee</span>
                                 <span className="badge badge-secondary badge-pill">
                                     {attendeeNums}
                                 </span>
@@ -60,9 +77,13 @@ export default class List extends Component {
                             <ul className="list-group attendee-list shadow">
                             {
                                 items.map((value, index) => {
-                                    return <li className="list-group-item attendee"
-                                            key={index}>{value}
-                                        </li>
+                                    return <ListGroup className="attendee-list-item"
+                                                      key={index}
+                                                      horizontal>
+                                                <ListGroup.Item>{value.id}</ListGroup.Item>
+                                                <ListGroup.Item>{value.name}</ListGroup.Item>
+                                                <ListGroup.Item>{value.phone}</ListGroup.Item>
+                                           </ListGroup>
                                 })
                             }
                             </ul>
