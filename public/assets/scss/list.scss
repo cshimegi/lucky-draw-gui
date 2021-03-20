@@ -18,6 +18,8 @@ li {
         }
     }
 }
-.btn-register {
-    margin-right: 8px;
+.float-right {
+    &:not(:first-child) {
+        margin-right: 8px;
+    }
 }
