@@ -10,3 +10,37 @@ main {
         border-bottom: 3px double dodgerblue;
     }
 }
+.modal {
+    background-color: rgba(0,0,0,0.2);
+}
+.modal-dialog {
+    position: relative;
+    top: 30vh;
+
+    .result-body,
+    .waiting-body,
+    .no-start {
+        &.show{
+            display: block;
+        }
+
+        &.hide {
+            display: none;
+        }
+    }
+
+    .lucky-person-contact {
+        div {
+            display: inline-block;
+        }
+        
+        label {
+            font-weight: 700;
+        }
+    }
+}
+.highlight {
+    &.red {
+        color: #ee3322;
+    }
+}
