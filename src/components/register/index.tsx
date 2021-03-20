@@ -10,6 +10,8 @@ interface IState {
 };
 
 export default class List extends Component<{}, IState> {
+    isMounted: boolean = true;
+
     constructor (props)
     {
         super(props);
@@ -26,23 +28,31 @@ export default class List extends Component<{}, IState> {
         this.getAllAttendee();
     }
 
+    componentWillUnmount (): void
+    {
+        this.isMounted = false;
+    }
+
     getAllAttendee (): void
     {
         RepoService
             .getAll('attendee')
             .then(
                 (results) => {
-                    this.setState({
-                        isLoaded: true,
-                        items: results
-                    });
+                    if (this.isMounted) {
+                        this.setState({
+                            isLoaded: true,
+                            items: results
+                        });
+                    }
                 },
                 (error) => {
-                    console.error(error)
-                    this.setState({
-                        isLoaded: true,
-                        error: error
-                    });
+                    if (this.isMounted) {
+                        this.setState({
+                            isLoaded: true,
+                            error: error
+                        });
+                    }
                 }
             )
     }
