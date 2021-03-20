@@ -3,3 +3,10 @@ main {
         margin-top: 64px;
     }
 }
+.lucky-draw-poster-container {
+    border: blue 5px dashed;
+
+    .poster-title {
+        border-bottom: 3px double dodgerblue;
+    }
+}

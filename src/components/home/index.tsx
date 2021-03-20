@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import Timer from '@app/timer/timer';
 import TimerButton from '@app/timer/button';
 import Form from 'react-bootstrap/Form';
+import RepoService from '@service/repo';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 interface IState {
-    timerTime: number
+    timerTime: number,
+    isLoaded: boolean,
+    items: any,
+    error: any
 }
 export default class Home extends Component<{}, IState> {
     refs: any;
+    isMounted: boolean = false;
 
     constructor(props)
     {
@@ -15,10 +21,42 @@ export default class Home extends Component<{}, IState> {
         
         this.refs = React.createRef();
         this.state = {
-            timerTime: 0
+            timerTime: 0,
+            isLoaded: false,
+            items: [],
+            error: null
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.drawLuckyPeople = this.drawLuckyPeople.bind(this);
+    }
+
+    componentDidMount (): void
+    {
+        RepoService
+            .getAll('attendee')
+            .then(
+                (results) => {
+                    if (this.isMounted) {
+                        this.setState({
+                            isLoaded: true,
+                            items: results
+                        });
+                    }
+                },
+                (error) => {
+                    if (this.isMounted) {
+                        this.setState({
+                            isLoaded: true,
+                            error: error
+                        });
+                    }
+                }
+            )
+    }
+
+    componentWillUnmount (): void
+    {
+        this.isMounted = false;
     }
 
     setTimerTime (timerTime: string): void
@@ -45,6 +83,15 @@ export default class Home extends Component<{}, IState> {
 
     render ()
     {
+        const items = this.state.items.map((item) => {
+            item.name = unescape(item.name);
+            item.email = unescape(item.email);
+            item.phone = unescape(item.phone);
+            
+            return item;
+        });
+        const attendeeNums = this.state.items.length;
+
         return (
             <>
                 <main role="main" className="container">
@@ -77,8 +124,26 @@ export default class Home extends Component<{}, IState> {
                                 </div>
                             </div>
                         </div>
-                        <div className="col-md-6 order-md-1">
-
+                        <div className="col-md-6 order-md-2 mb-4">
+                            <h4 className="d-flex justify-content-between align-items-center mb-3">
+                                <span className="text-muted">Current Attendee</span>
+                                <span className="badge badge-secondary badge-pill">
+                                    {attendeeNums}
+                                </span>
+                            </h4>
+                            <ul className="list-group attendee-list shadow">
+                            {
+                                items.map((value, index) => {
+                                    return <ListGroup className="attendee-list-item"
+                                                      key={index}
+                                                      horizontal>
+                                                <ListGroup.Item>{value.id}</ListGroup.Item>
+                                                <ListGroup.Item>{value.name}</ListGroup.Item>
+                                                <ListGroup.Item>{value.phone}</ListGroup.Item>
+                                           </ListGroup>
+                                })
+                            }
+                            </ul>
                         </div>
                     </div>
                 </main>
