@@ -83,7 +83,16 @@ export default class List extends Component<{}, IState> {
         RepoService.post('attendee', params)
             .then(
                 (result) => {
-                    console.log(result.json());
+                    console.log(result);
+                    
+                    this.setState({ 
+                        name: '',
+                        email: '',
+                        phone: ''
+                    });
+
+                    alert("register success");
+                    
                 },
                 (error) => {
                     console.error(error);
