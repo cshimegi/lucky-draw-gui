@@ -1,5 +1,5 @@
 
-const BASE_API = "http://localhost:8080/api/v1";
+const BASE_API = "http://192.168.12.2:8080/api/v1";
 
 export default {
     getById : (repo: string, id: number) => {
